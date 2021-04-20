@@ -46,20 +46,19 @@ def build_deformable_detr(panoptic=False, num_classes=91, **kwargs):
     args.set_cost_bbox = kwargs.get('set_cost_bbox', 5) 
     args.set_cost_giou = kwargs.get('set_cost_giou', 2) 
 
-
     model, criterion, postprocessors = build(args)
     model.to(args.device)
 
-    return_postprocessor = kwargs.get('return_postprocessors', False)
-    if return_postprocessor:
+    return_postprocessors = kwargs.get('return_postprocessors', False)
+    if return_postprocessors:
         return model, postprocessors
     return model
 
 
 def deformable_detr_r50(num_classes=91, return_postprocessor=False):
     if return_postprocessor:
-        model, postprocessors = build_deformable_detr(backbone='resnet50', num_classes=num_classes, return_postprocessor=return_postprocessor)
-        return model, postprocessors
+        model, postprocessors = build_deformable_detr(backbone='resnet50', num_classes=num_classes, return_postprocessors=return_postprocessor)
+        return model, postprocessors['bbox']
     else:
-        model = build_deformable_detr(backbone='resnet50', num_classes=num_classes, return_postprocessor=return_postprocessor)
+        model = build_deformable_detr(backbone='resnet50', num_classes=num_classes)
         return model
