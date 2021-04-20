@@ -162,8 +162,13 @@ GPUS_PER_NODE=8 ./tools/run_dist_slurm.sh <partition> deformable_detr 16 configs
 
 You can get the config file and pretrained model of Deformable DETR (the link is in "Main Results" session), then run following command to evaluate it on COCO 2017 validation set:
 
-```bash
+```sh
 <path to config file> --resume <path to pre-trained model> --eval
+```
+
+For example, to evaluate the standard deformable DETR with the pretrained checkpoint over COCO2017:
+```sh
+tools/run_dist_launch.sh 1 configs/r50_deformable_detr.sh --eval --resume ~/.cache/torch/hub/checkpoints/deformable_detr_r50-main.pt --coco_path ../coco --batch_size 12
 ```
 
 You can also run distributed evaluation by using ```./tools/run_dist_launch.sh``` or ```./tools/run_dist_slurm.sh```.
