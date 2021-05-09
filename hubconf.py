@@ -55,10 +55,10 @@ def build_deformable_detr(panoptic=False, num_classes=91, **kwargs):
     return model
 
 
-def deformable_detr_r50(num_classes=91, return_postprocessor=False):
+def deformable_detr_r50(num_classes=91, return_postprocessor=False, **kwargs):
     if return_postprocessor:
-        model, postprocessors = build_deformable_detr(backbone='resnet50', num_classes=num_classes, return_postprocessors=return_postprocessor)
+        model, postprocessors = build_deformable_detr(backbone='resnet50', num_classes=num_classes, return_postprocessors=return_postprocessor, **kwargs)
         return model, postprocessors['bbox']
     else:
-        model = build_deformable_detr(backbone='resnet50', num_classes=num_classes)
+        model = build_deformable_detr(backbone='resnet50', num_classes=num_classes, **kwargs)
         return model
