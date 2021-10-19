@@ -24,6 +24,7 @@ import torch
 import torch.nn as nn
 import torch.distributed as dist
 from torch import Tensor
+from torch.nn.functional import interpolate
 
 # needed due to empty tensor bug in pytorch and torchvision 0.5
 import torchvision
@@ -478,29 +479,6 @@ def accuracy(output, target, topk=(1,)):
         correct_k = correct[:k].view(-1).float().sum(0)
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
-
-
-def interpolate(input, size=None, scale_factor=None, mode="nearest", align_corners=None):
-    # type: (Tensor, Optional[List[int]], Optional[float], str, Optional[bool]) -> Tensor
-    """
-    Equivalent to nn.functional.interpolate, but with support for empty batch sizes.
-    This will eventually be supported natively by PyTorch, and this
-    class can go away.
-    """
-    if float(torchvision.__version__[:3]) < 0.7:
-        if input.numel() > 0:
-            return torch.nn.functional.interpolate(
-                input, size, scale_factor, mode, align_corners
-            )
-
-        output_shape = _output_size(2, input, size, scale_factor)
-        output_shape = list(input.shape[:-2]) + list(output_shape)
-        if float(torchvision.__version__[:3]) < 0.5:
-            return _NewEmptyTensorOp.apply(input, output_shape)
-        return _new_empty_tensor(input, output_shape)
-    else:
-        return torchvision.ops.misc.interpolate(input, size, scale_factor, mode, align_corners)
-
 
 def get_total_grad_norm(parameters, norm_type=2):
     parameters = list(filter(lambda p: p.grad is not None, parameters))
