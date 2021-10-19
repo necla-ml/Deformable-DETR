@@ -30,7 +30,6 @@ from torch.nn.functional import interpolate
 import torchvision
 if float(torchvision.__version__[:3]) < 0.5:
     import math
-    from torchvision.ops.misc import _NewEmptyTensorOp
     def _check_size_scale_factor(dim, size, scale_factor):
         # type: (int, Optional[List[int]], Optional[float]) -> None
         if size is None and scale_factor is None:
